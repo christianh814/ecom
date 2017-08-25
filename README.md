@@ -24,3 +24,19 @@ Start Bootstrap is based on the [Bootstrap](http://getbootstrap.com/) framework 
 ## Copyright and License
 
 Copyright 2013-2015 Iron Summit Media Strategies, LLC. Code released under the [Apache 2.0](https://github.com/IronSummitMedia/startbootstrap-shop-homepage/blob/gh-pages/LICENSE) license.
+
+## Apache Notes
+Since I have `public` and `resource` dirs; your apache vhost config might look like this
+
+```
+# Ecom Website
+<VirtualHost *:80>
+    ServerAdmin webmaster@dummy-host.example.com
+    DocumentRoot "/var/www/html/ecom/public"
+    ServerName ecom.172.16.1.253.nip.io
+    ServerAlias ecom.172.16.1.253.nip.io
+    ErrorLog "logs/ecom-error_log"
+    CustomLog "logs/ecom-access_log" common
+</VirtualHost>
+
+```

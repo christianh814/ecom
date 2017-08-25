@@ -26,7 +26,7 @@ Start Bootstrap is based on the [Bootstrap](http://getbootstrap.com/) framework 
 Copyright 2013-2015 Iron Summit Media Strategies, LLC. Code released under the [Apache 2.0](https://github.com/IronSummitMedia/startbootstrap-shop-homepage/blob/gh-pages/LICENSE) license.
 
 ## Apache Notes
-Since I have `public` and `resource` dirs; your apache vhost config might look like this
+Since I have `public` (which is what is being served) and `resource` (all the configurations) dirs; your apache vhost config might look like this
 
 ```
 # Ecom Website

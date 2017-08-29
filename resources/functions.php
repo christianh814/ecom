@@ -1,4 +1,21 @@
 <?php
+function setMessage($msg) {
+	if (!empty($msg)) {
+		$_SESSION['message'] = $msg;
+	} else {
+		$msg = "";
+	}
+}
+//
+
+function displayMessage() {
+	if (isset($_SESSION['message'])) {
+		echo $_SESSION['message'];
+		unset($_SESSION['message']);
+	}
+}
+//
+
 function redirect($location) {
 	header("Location: {$location}");
 }
@@ -113,6 +130,64 @@ function getCategories() {
 DELIMITER;
 		echo $category_links;
 	}
+}
+//
+
+function loginUser() {
+	global $connection;
+	if (isset($_POST['submit'])) {
+		$username = escapeString($_POST['username']);
+		$posted_password = escapeString($_POST['password']);
+		$query = query("SELECT * FROM users WHERE user_name = '{$username}'");
+		confirm($query);
+		// In case the query returns nothing
+		if (mysqli_num_rows($query) == 0) {
+			setMessage("Username or Password was incorrect");
+			redirect("login.php");
+		}
+		while ($row = fetchArray($query)) {
+			$user_name = $row['user_name'] ;
+			$user_email = $row['user_email'];
+			$user_password = $row['user_password'];
+			if (!password_verify($posted_password, $user_password)) {
+				setMessage("Username or Password was incorrect");
+				redirect("login.php");
+			} else {
+				setMessage("Welcome to Admin" . $user_name);
+				redirect("/admin");
+			}
+		}
+	}
+}
+//
+
+function sendContactmsg() {
+		if (!empty($_POST['name']) && !empty($_POST['email']) && !empty($_POST['subject']) && !empty($_POST['message'])) {
+			global $connect;
+			$name = $_POST['name'];
+			$email = $_POST['email'];
+			$subject = $_POST['subject'];
+			$message =  $_POST['message'];
+
+			$from = new SendGrid\Email($name, $email);    
+			$subject = $subject;
+			$to = new SendGrid\Email("New Contact", "ecom_chx@mailinator.com");    
+			$content = new SendGrid\Content("text/plain", $message);    
+			
+			$mail = new SendGrid\Mail($from, $subject, $to, $content);    
+			
+			$apiKey = getenv('SENDGRID_API_KEY');    
+			$sg = new \SendGrid($apiKey);    
+			
+			$response = $sg->client->mail()->send()->post($mail);    
+			if ($response->statusCode() == 202) {    
+				setMessage("Your message has been sent");
+				redirect("contact.php");
+			} else {    
+				setMessage("Error trying to send message...please try again");
+				redirect("contact.php");
+			}
+		}
 }
 //
 ?>

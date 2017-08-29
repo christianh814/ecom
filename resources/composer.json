@@ -1,0 +1,12 @@
+{
+    "name": "ecom",
+    "require": {
+        "sendgrid/sendgrid": "~6.0"
+    },
+    "authors": [
+        {
+            "name": "Christian Hernandez",
+            "email": "c_hernand1982@yahoo.com"
+        }
+    ]
+}

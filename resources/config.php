@@ -19,6 +19,6 @@ defined("DB_NAME") ? null : define("DB_NAME", getenv("MYSQL_DATABASE"));
 $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 // Include all of what we need
-require __DIR__ . "/vendor/autoload.php";
+require_once(__DIR__ . DS . "vendor/autoload.php");
 require_once("functions.php");
 ?>

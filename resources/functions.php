@@ -162,7 +162,7 @@ function loginUser() {
 //
 
 function sendContactmsg() {
-		if (!empty($_POST['name']) && !empty($_POST['email']) && !empty($_POST['subject']) && !empty($_POST['message'])) {
+		if (isset($_POST['submit'])) {
 			global $connect;
 			$name = $_POST['name'];
 			$email = $_POST['email'];

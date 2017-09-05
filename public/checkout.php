@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php require_once("../resources/config.php"); ?>                                     
-<?php require_once("cart.php"); ?> 
+<?php require_once("cart.php"); ?>                                     
 <?php include(TEMPLATE_FRONT . DS . "header.php"); ?> 
 
     <!-- Page Content -->
@@ -36,7 +36,7 @@
 
 
 
-<!--  ***********CART TOTALS*************-->
+<!--  ***********CART TOTALS************* -->
             
 <div class="col-xs-4 pull-right ">
 <h2>Cart Totals</h2>

@@ -51,6 +51,7 @@ function getProducts() {
 	$query = query("SELECT * FROM products");
 	confirm($query);
 	while ($row = fetchArray($query)) {
+	$dir = __DIR__;
 	$product = <<<DELIMITER
 		<div class="col-sm-4 col-lg-4 col-md-4">
 		    <div class="thumbnail">
@@ -153,6 +154,7 @@ function loginUser() {
 				setMessage("Username or Password was incorrect");
 				redirect("login.php");
 			} else {
+				$_SESSION['username'] = $username;
 				setMessage("Welcome to Admin" . $user_name);
 				redirect("/admin");
 			}

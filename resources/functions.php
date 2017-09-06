@@ -164,32 +164,54 @@ function loginUser() {
 //
 
 function sendContactmsg() {
-		if (isset($_POST['submit'])) {
-			global $connect;
-			$name = $_POST['name'];
-			$email = $_POST['email'];
-			$subject = $_POST['subject'];
-			$message =  $_POST['message'];
+	if (isset($_POST['submit'])) {
+		global $connect;
+		$name = $_POST['name'];
+		$email = $_POST['email'];
+		$subject = $_POST['subject'];
+		$message =  $_POST['message'];
 
-			$from = new SendGrid\Email($name, $email);    
-			$subject = $subject;
-			$to = new SendGrid\Email("New Contact", "ecom_chx@mailinator.com");    
-			$content = new SendGrid\Content("text/plain", $message);    
-			
-			$mail = new SendGrid\Mail($from, $subject, $to, $content);    
-			
-			$apiKey = getenv('SENDGRID_API_KEY');    
-			$sg = new \SendGrid($apiKey);    
-			
-			$response = $sg->client->mail()->send()->post($mail);    
-			if ($response->statusCode() == 202) {    
-				setMessage("Your message has been sent");
-				redirect("contact.php");
-			} else {    
-				setMessage("Error trying to send message...please try again");
-				redirect("contact.php");
-			}
+		$from = new SendGrid\Email($name, $email);    
+		$subject = $subject;
+		$to = new SendGrid\Email("New Contact", "ecom_chx@mailinator.com");    
+		$content = new SendGrid\Content("text/plain", $message);    
+		
+		$mail = new SendGrid\Mail($from, $subject, $to, $content);    
+		
+		$apiKey = getenv('SENDGRID_API_KEY');    
+		$sg = new \SendGrid($apiKey);    
+		
+		$response = $sg->client->mail()->send()->post($mail);    
+		if ($response->statusCode() == 202) {    
+			setMessage("Your message has been sent");
+			redirect("contact.php");
+		} else {    
+			setMessage("Error trying to send message...please try again");
+			redirect("contact.php");
 		}
+	}
+}
+//
+
+function lastId() {
+	global $connection;
+	return mysqli_insert_id($connection);
+}
+//
+
+function displayOrders() {
+	$query = query("SELECT * FROM orders");
+	confirm($query);
+	while($row = fetchArray($query)) {
+		echo "<tr>";
+		echo "<td>{$row['order_id']}</td>";
+		echo "<td>&#36;{$row['order_amount']}</td>";
+		echo "<td>{$row['order_transaction']}</td>";
+		echo "<td>{$row['order_currency']}</td>";
+		echo "<td>{$row['order_status']}</td>";
+		echo "<td><a class='btn btn-danger' href='/admin/delete_order.php?id={$row['order_id']}'><span class='glyphicon glyphicon-remove'></span></a></td>";
+		echo "</tr>";
+	}
 }
 //
 ?>

@@ -9,6 +9,7 @@ session_start();
 defined("DS") ? null : define("DS", DIRECTORY_SEPARATOR);
 defined("TEMPLATE_FRONT") ? null : define("TEMPLATE_FRONT", __DIR__ . DS . "templates/front" );
 defined("TEMPLATE_BACK") ? null : define("TEMPLATE_BACK", __DIR__ . DS . "templates/back" );
+defined("IMAGES_DIR") ? null : define("IMAGES_DIR", DS . "admin" . DS . "images" );
 
 // Define Database config
 defined("DB_HOST") ? null : define("DB_HOST", getenv("MYSQL_SERVICE_HOST"));

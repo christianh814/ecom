@@ -214,4 +214,45 @@ function displayOrders() {
 	}
 }
 //
+
+function getProductsinAdmin() {
+	$query = query("SELECT * FROM products");
+	confirm($query);
+	while($row = fetchArray($query)) {
+		echo "<tr>";
+		echo "<td>{$row['product_id']}</td>";
+		echo "<td>{$row['product_title']}</td>";
+		echo "<td><a href='/admin/index.php?edit_product&id={$row['product_id']}'><img src='{$row['product_image']}' alt='product image' width='62' height='62'></img></a></td>";
+		echo "<td>CATEGORY</td>";
+		echo "<td>&#36;{$row['product_price']}</td>";
+		echo "<td>{$row['product_qty']}</td>";
+		echo "<td><a class='btn btn-danger' href='/admin/delete_product.php?id={$row['product_id']}'><span class='glyphicon glyphicon-remove'></span></a></td>";
+		echo "</tr>";
+	}
+}
+//
+
+function addProduct() {
+	if (isset($_POST['publish'])) {
+		$product_title = escapeString($_POST['product_title']);
+		$product_category_id = escapeString($_POST['product_category_id']);
+		$product_price = escapeString($_POST['product_price']);
+		$product_qty = escapeString($_POST['product_qty']);
+		$product_description = escapeString($_POST['product_description']);
+		$product_short_desc = escapeString($_POST['product_short_desc']);
+		$product_image = escapeString($_FILES['file']['name']);
+		$image_tmp = escapeString($_FILES['file']['tmp_name']);
+
+		move_uploaded_file($image_tmp, IMAGES_DIR . DS . $product_image);
+		$image_fullpath = IMAGES_DIR . DS . $product_image;
+
+		// $query = query("INSERT INTO products(product_title, product_category_id, product_price, product_qty, product_description, product_short_desc, product_image) VALUES('{$product_title}', '{$product_category_id}', '{$product_price}', '{$product_qty}', '{$product_description}', '{$product_short_desc}', '{$image_fullpath}') ");
+		$query = query("INSERT INTO products(product_title, product_category_id, product_price, product_qty, product_description, product_short_desc, product_image) VALUES('{$product_title}', '77', '{$product_price}', '{$product_qty}', '{$product_description}', '{$product_short_desc}', '{$image_fullpath}') ");
+		confirm($query);
+		$last_id = lastId();
+		setMessage("New Product with ID {$last_id} added");
+		redirect("/admin/index.php?products");
+	}
+}
+//
 ?>

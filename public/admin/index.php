@@ -33,6 +33,9 @@ if (!isset($_SESSION['username'])) {
 			if (isset($_GET['users'])) {
 				include(TEMPLATE_BACK . DS . "users.php");
 			}
+			if (isset($_GET['edit_product'])) {
+				include(TEMPLATE_BACK . DS . "edit_product.php");
+			}
 		?>
 
             </div>

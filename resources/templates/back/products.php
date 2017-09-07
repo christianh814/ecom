@@ -1,7 +1,5 @@
-<h1 class="page-header">
-   All Products
-
-</h1>
+<h1 class="page-header">All Products</h1>
+<h3 class="bg-success"><?php displayMessage(); ?></h3>
 <table class="table table-hover">
 
 
@@ -13,19 +11,11 @@
            <th>Image</th>
            <th>Category</th>
            <th>Price</th>
+           <th>Qty</th>
+           <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-
-      <tr>
-            <td>20</td>
-            <td>Nikon 234</td>
-            <td><img src="http://placehold.it/62x62" alt=""></td>
-            <td>Category</td>
-            <td>123</td>
-        </tr>
-      
-
-
-  </tbody>
+    <?php getProductsinAdmin(); ?>
+    </tbody>
 </table>

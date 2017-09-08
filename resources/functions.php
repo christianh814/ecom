@@ -292,17 +292,19 @@ function updateProduct() {
 		$product_description = escapeString($_POST['product_description']);
 		$product_short_desc = escapeString($_POST['product_short_desc']);
 		$product_image = escapeString($_FILES['file']['name']);
-		$image_tmp = escapeString($_FILES['file']['tmp_name']);
+		$image_tmp = $_FILES['file']['tmp_name'];
+		$image_fullpath = IMAGES_DIR . DS . $product_image;
 
-		if (empty($product_image)){
+		if (strlen($product_image) == 0){
 			$get_pic = query("SELECT product_image FROM products WHERE product_id = " . escapeString($_GET['id']) . " ");
 			confirm($get_pic);
 			while ($pic = fetchArray($get_pic)) {
 				$product_image = $pic['product_image'];
+				$image_fullpath = $product_image;
 			}
 		}
+
 		move_uploaded_file($image_tmp, IMAGES_PATH . DS . $product_image);
-		$image_fullpath = IMAGES_DIR . DS . $product_image;
 
 		$query = "UPDATE products SET ";
 		$query .= "product_title = '{$product_title}' ,";

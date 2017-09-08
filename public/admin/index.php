@@ -4,7 +4,7 @@
 <?php
 
 if (!isset($_SESSION['username'])) {
-	redirect('/');
+	redirect('/login.php');
 }
 
 ?>

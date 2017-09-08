@@ -325,4 +325,92 @@ function updateProduct() {
 }
 //
 
+function showCatinAdmin() {
+	$category_query = query("SELECT * FROM categories ");
+	confirm($category_query);
+	while ($row = fetchArray($category_query)) {
+		$cat_id = $row['cat_id'];
+		$cat_title = $row['cat_title'];
+		echo "<tr>";
+		echo "<td>{$cat_id}</td>";
+		echo "<td>{$cat_title}</td>";
+		echo "<td><a class='btn btn-danger' href='/admin/delete_category.php?id={$cat_id}'><span class='glyphicon glyphicon-remove'></span></a></td>";
+		echo "</tr>";
+
+	}
+}
+//
+
+function addCategory() {
+	if (isset($_POST['add_category'])) {
+		if (empty($_POST['cat_title'])) {
+			setMessage("Category must not be empty");
+		} else {
+			$cat_title = escapeString($_POST['cat_title']);
+			$query = query("INSERT INTO categories (cat_title) VALUES ('{$cat_title}') ");
+			confirm($query);
+			setMessage("Category " . $cat_title . " created");
+			// redirect("/admin/index.php?categories");
+		}
+	}
+}
+//
+
+function showUsersinAdmin() {
+	$users_query = query("SELECT * FROM users ");
+	confirm($users_query);
+	while ($row = fetchArray($users_query)) {
+		$user_id = $row['user_id'];
+		$user_name = $row['user_name'];
+		$user_email = $row['user_email'];
+		$user_image = $row['user_image'];
+		echo "<tr>";
+		echo "<td>{$user_id}</td>";
+		echo "<td><img class='admin-user-thumbnail user_image' width='62' src='{$user_image}' alt='user image'></td>";
+		echo "<td>{$user_name}</td>";
+		echo "<td>{$user_email}</td>";
+		echo "<td><a class='btn btn-danger' href='/admin/delete_user.php?id={$user_id}'><span class='glyphicon glyphicon-remove'></span></a></td>";
+		echo "</tr>";
+	}
+}
+//
+
+function addUser() {
+	if (isset($_POST['add_user'])) {
+		$user_name = escapeString($_POST['username']);
+		$user_email = escapeString($_POST['email']);
+		$user_password = escapeString($_POST['password']);
+		$user_image = escapeString($_FILES['file']['name']);
+		$image_tmp = $_FILES['file']['tmp_name'];
+		$image_fullpath = IMAGES_DIR . DS . $user_image;
+		move_uploaded_file($image_tmp, IMAGES_PATH . DS . $user_image);
+
+		$crypt_password = password_hash($user_password, PASSWORD_BCRYPT, array('cost' => 12));
+
+		$query = query("INSERT INTO users (user_name, user_email, user_password, user_image) VALUES ('{$user_name}', '{$user_email}', '{$crypt_password}', '{$image_fullpath}') ");
+		confirm($query);
+		setMessage("User Created");
+		//redirect("/admin/index.php?users");
+	}
+}
+//
+
+function getReport() {
+	$query = query("SELECT * FROM reports");
+	confirm($query);
+	while($row = fetchArray($query)) {
+		echo "<tr>";
+		echo "<td>{$row['report_id']}</td>";
+		echo "<td>{$row['product_id']}</td>";
+		echo "<td>{$row['order_id']}</td>";
+		echo "<td>{$row['product_price']}</td>";
+		//echo "<td>" . showCategory($row['product_category_id']) . "</td>";
+		echo "<td>{$row['product_title']}</td>";
+		echo "<td>{$row['product_qty']}</td>";
+		echo "<td><a class='btn btn-danger' href='/admin/delete_report.php?id={$row['report_id']}'><span class='glyphicon glyphicon-remove'></span></a></td>";
+		echo "</tr>";
+	}
+}
+//
+
 ?>

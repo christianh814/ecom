@@ -1,8 +1,6 @@
-<h1 class="page-header">
-  Product Categories
-
-</h1>
-
+<?php addCategory();?>
+<h1 class="page-header">Product Categories</h1>
+<h3 class="bg-success"><?php displayMessage(); ?></h3>
 
 <div class="col-md-4">
     
@@ -10,12 +8,12 @@
     
         <div class="form-group">
             <label for="category-title">Title</label>
-            <input type="text" class="form-control">
+            <input type="text" name="cat_title" class="form-control">
         </div>
 
         <div class="form-group">
             
-            <input type="submit" class="btn btn-primary" value="Add Category">
+            <input type="submit" name="add_category" class="btn btn-primary" value="Add Category">
         </div>      
 
 
@@ -33,15 +31,13 @@
         <tr>
             <th>id</th>
             <th>Title</th>
+            <th>Actions</th>
         </tr>
             </thead>
 
 
     <tbody>
-        <tr>
-            <td>20</td>
-            <td>Example Title</td>
-        </tr>
+    	<?php showCatinAdmin() ?>
     </tbody>
 
         </table>

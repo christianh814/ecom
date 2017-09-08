@@ -8,14 +8,14 @@
                         <a href="index.php?orders"><i class="fa fa-fw fa-shopping-cart"></i> Orders</a>
                     </li>
                     <li>
-                        <a href="index.php?products"><i class="fa fa-fw fa-bar-chart-o"></i> View Products</a>
+                        <a href="index.php?products"><i class="fa fa-fw fa-cubes"></i> View Products</a>
                     </li>
                     <li>
-                        <a href="index.php?add_product"><i class="fa fa-fw fa-table"></i> Add Product</a>
+                        <a href="index.php?add_product"><i class="fa fa-fw fa-cube"></i> Add Product</a>
                     </li>
                     
                     <li>
-                        <a href="index.php?categories"><i class="fa fa-fw fa-desktop"></i> Categories</a>
+                        <a href="index.php?categories"><i class="fa fa-fw fa-list"></i> Categories</a>
                     </li>
                     <li>
                         <a href="index.php?users"><i class="fa fa-fw fa-users"></i> Users</a>

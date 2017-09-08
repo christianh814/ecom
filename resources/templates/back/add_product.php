@@ -58,7 +58,7 @@
          <label for="product-title">Product Category</label>
         <select name="product_category_id" id="" class="form-control">
             <option value="">Select Category</option>
-           
+	    <?php showCategories(); ?>
         </select>
 
 

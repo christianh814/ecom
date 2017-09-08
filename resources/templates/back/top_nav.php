@@ -6,7 +6,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/admin">SB Admin</a>
+                <a class="navbar-brand" href="/admin">eCom Admin</a>
+                <a class="navbar-brand" href="/">Store</a>
             </div>
 	    <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">

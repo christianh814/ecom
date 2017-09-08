@@ -62,6 +62,7 @@ function cart() {
 				$product = <<<EOT
 				<tr>
 					<td>{$row['product_title']}</td>
+					<td><img src="{$row['product_image']}" width="100" alt=""></td>
 					<td>&#36;{$row['product_price']}</td>
 					<td>{$value}</td>
 					<td>&#36;{$sub}</td>

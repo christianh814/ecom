@@ -52,6 +52,7 @@ function cart() {
 	$quantity = 1;
 	foreach ($_SESSION as $name => $value) {
 		if ($value > 0) {
+			// This if limits the products to only 8 products for your store
 			if (substr($name, 0, 8) == "product_") {
 				$id = str_replace("product_", "", $name);
 				$query = query("SELECT * FROM products WHERE product_id = " . escapeString($id) . " ");

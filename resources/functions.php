@@ -50,13 +50,65 @@ function fetchArray($result) {
 function getProducts() {
 	$query = query("SELECT * FROM products WHERE product_qty >= 1 ");
 	confirm($query);
-	while ($row = fetchArray($query)) {
+	// pagination section
+	$rows = mysqli_num_rows($query);
+	if (isset($_GET['page'])) {
+		$page = preg_replace('#[^0-9]#', '', $_GET['page']);
+	} else {
+		$page = 1;
+	}
+	$per_page = 6;
+	$last_page = ceil($rows / $per_page);
+	if ($page < 1) {
+		$page = 1;
+	} elseif ($page> $last_page) {
+		$page = $last_page;
+	}
+	//
+	$mid_numbers = '';
+	$subtract_by_1 = $page - 1;
+	$subtract_by_2 = $page - 2;
+	$add_by_1 = $page + 1;
+	$add_by_2 = $page + 2;
+
+	if($page == 1) {
+		$mid_numbers .= '<li class="page-item active"><a>' . $page . '</a></li>';
+		$mid_numbers .= '<li class="page-item"><a class="page-link" href="' . $_SERVER['PHP_SELF'] . '?page=' . $add_by_1 . '">' . $add_by_1 . '</a></li>';
+	} elseif ($page == $last_page) {
+		$mid_numbers .= '<li class="page-item"><a class="page-link" href="' . $_SERVER['PHP_SELF'] . '?page=' . $subtract_by_1 . '">' . $subtract_by_1 . '</a></li>';
+		$mid_numbers .= '<li class="page-item active"><a>' . $page . '</a></li>';
+	} elseif ($page > 2 && $page < ($last_page - 1)) {
+		$mid_numbers .= '<li class="page-item"><a class="page-link" href="' . $_SERVER['PHP_SELF'] . '?page=' . $subtract_by_2 . '">' . $subtract_by_2 . '</a></li>';
+		$mid_numbers .= '<li class="page-item"><a class="page-link" href="' . $_SERVER['PHP_SELF'] . '?page=' . $subtract_by_1 . '">' . $subtract_by_1 . '</a></li>';
+		$mid_numbers .= '<li class="page-item active"><a>' . $page . '</a></li>';
+		$mid_numbers .= '<li class="page-item"><a class="page-link" href="' . $_SERVER['PHP_SELF'] . '?page=' . $add_by_1 . '">' . $add_by_1 . '</a></li>';
+		$mid_numbers .= '<li class="page-item"><a class="page-link" href="' . $_SERVER['PHP_SELF'] . '?page=' . $add_by_2 . '">' . $add_by_2 . '</a></li>';
+	} elseif ($page > 1 && $page < $last_page) {
+		$mid_numbers .= '<li class="page-item"><a class="page-link" href="' . $_SERVER['PHP_SELF'] . '?page=' . $subtract_by_1 . '">' . $subtract_by_1 . '</a></li>';
+		$mid_numbers .= '<li class="page-item active"><a>' . $page . '</a></li>';
+		$mid_numbers .= '<li class="page-item"><a class="page-link" href="' . $_SERVER['PHP_SELF'] . '?page=' . $add_by_1 . '">' . $add_by_1 . '</a></li>';
+	}
+	$limit = "LIMIT " . ($page - 1) * $per_page . ", " . $per_page; 
+	$query2 = query("SELECT * FROM products " . $limit);
+	confirm($query2);
+	$output_pagination = '';
+	if ($page != 1) {
+		$prev = $page - 1;
+		$output_pagination .= '<li class="page-item"><a class="page-link" href="' . $_SERVER['PHP_SELF'] . '?page=' . $prev . '">Back</a></li>';
+	}
+	$output_pagination .= $mid_numbers;
+	if ($page != $last_page) {
+		$next = $page + 1;
+		$output_pagination .= '<li class="page-item"><a class="page-link" href="' . $_SERVER['PHP_SELF'] . '?page=' . $next . '">Next</a></li>';
+	}
+	//
+	while ($row = fetchArray($query2)) {
 	$dir = __DIR__;
-	$short_desc = substr($row['product_short_desc'], 0, -250);
+	$short_desc = substr($row['product_short_desc'], 0, 50);
 	$product = <<<DELIMITER
 		<div class="col-sm-4 col-lg-4 col-md-4">
 		    <div class="thumbnail">
-		        <a href="item.php?id={$row['product_id']}"><img src="{$row['product_image']}" alt=""></a>
+		        <a href="item.php?id={$row['product_id']}"><img style="height:90px" src="{$row['product_image']}" alt=""></a>
 		        <div class="caption">
 		            <h4 class="pull-right">&#36;{$row['product_price']}</h4>
 		            <h4><a href="item.php?id={$row['product_id']}">{$row['product_title']}</a>
@@ -69,6 +121,7 @@ function getProducts() {
 DELIMITER;
 	echo $product;
 	}
+	echo "<div class='text-center'><ul class='pagination'>{$output_pagination}</ul></div>";
 	
 }
 //
@@ -77,7 +130,7 @@ function getProductsfromCategories($catid) {
 	$query = query("SELECT * FROM products WHERE product_category_id = " . escapeString($catid) . " AND product_qty >= 1 ");
 	confirm($query);
 	while ($row = fetchArray($query)) {
-	$short_desc = substr($row['product_short_desc'], 0, -250);
+	$short_desc = substr($row['product_short_desc'], 0, 50);
 	$product = <<<DELIMITER
             <div class="col-md-4 col-sm-7 hero-feature">
                 <div class="thumbnail">
@@ -103,9 +156,9 @@ function getProductsShop() {
 	$query = query("SELECT * FROM products WHERE product_qty >= 1");
 	confirm($query);
 	while ($row = fetchArray($query)) {
-	$short_desc = substr($row['product_short_desc'], 0, -250);
+	$short_desc = substr($row['product_short_desc'], 0, 50);
 	$product = <<<DELIMITER
-            <div class="col-md-4 col-sm-7 hero-feature">
+            <div class="col-md-3 col-sm-6 hero-feature">
                 <div class="thumbnail">
                     <img src="{$row['product_image']}" alt="">
                     <div class="caption">
@@ -403,7 +456,7 @@ function getReport() {
 		echo "<td>{$row['report_id']}</td>";
 		echo "<td>{$row['product_id']}</td>";
 		echo "<td>{$row['order_id']}</td>";
-		echo "<td>{$row['product_price']}</td>";
+		echo "<td>&#36;{$row['product_price']}</td>";
 		//echo "<td>" . showCategory($row['product_category_id']) . "</td>";
 		echo "<td>{$row['product_title']}</td>";
 		echo "<td>{$row['product_qty']}</td>";
@@ -477,9 +530,25 @@ function getSlideThumbnailinAdmin() {
 		$slide_id = $row['slide_id'];
 		$slide_title = $row['slide_title'];
 		$slide_image = $row['slide_image'];
-		echo "<div class='col-xs-6 col-md-3'>";
-		echo "<img width='200' class='thumbnail' src='{$slide_image}' alt='{$slide_title}'></img>";
+		echo "<div class='col-xs-6 col-md-3 image_container'>";
+		echo "<div class='caption'>";
+		echo "<p class=''>{$slide_title}</p>";
 		echo "</div>";
+		echo "<a href='/admin/delete_slide.php?id={$row['slide_id']}'>";
+		echo "<img width='200' class='thumbnail' src='{$slide_image}' alt='{$slide_title}'></img>";
+		echo "</a>";
+		echo "</div>";
+	}
+}
+//
+
+function deleteSlideImage($image_id) {
+	$query = query("SELECT slide_image FROM slides WHERE slide_id = " . $image_id . " ");
+	confirm($query);
+	while ($row = fetchArray($query)) {
+		$slide_image = $row['slide_image'];
+		$full_image_path = IMAGES_PATH_BASEDIR . $slide_image;
+		unlink($full_image_path);
 	}
 }
 //

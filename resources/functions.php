@@ -48,7 +48,7 @@ function fetchArray($result) {
 //
 
 function getProducts() {
-	$query = query("SELECT * FROM products");
+	$query = query("SELECT * FROM products WHERE product_qty >= 1 ");
 	confirm($query);
 	while ($row = fetchArray($query)) {
 	$dir = __DIR__;
@@ -74,7 +74,7 @@ DELIMITER;
 //
 
 function getProductsfromCategories($catid) {
-	$query = query("SELECT * FROM products WHERE product_category_id = " . escapeString($catid));
+	$query = query("SELECT * FROM products WHERE product_category_id = " . escapeString($catid) . " AND product_qty >= 1 ");
 	confirm($query);
 	while ($row = fetchArray($query)) {
 	$short_desc = substr($row['product_short_desc'], 0, -250);
@@ -100,7 +100,7 @@ DELIMITER;
 //
 
 function getProductsShop() {
-	$query = query("SELECT * FROM products ");
+	$query = query("SELECT * FROM products WHERE product_qty >= 1");
 	confirm($query);
 	while ($row = fetchArray($query)) {
 	$short_desc = substr($row['product_short_desc'], 0, -250);
@@ -160,7 +160,7 @@ function loginUser() {
 				redirect("login.php");
 			} else {
 				$_SESSION['username'] = $username;
-				setMessage("Welcome to Admin" . $user_name);
+				setMessage("Welcome to Admin " . $user_name);
 				redirect("/admin");
 			}
 		}
@@ -413,4 +413,74 @@ function getReport() {
 }
 //
 
+function addSlides() {
+	if(isset($_POST['add_slide'])){
+	$slide_title = escapeString($_POST['slide_title']);
+	$slide_image = escapeString($_FILES['file']['name']);
+	$image_tmp = $_FILES['file']['tmp_name'];
+	$image_fullpath = IMAGES_DIR . DS . $slide_image;
+
+	if (empty($slide_title) || empty($slide_image)) {
+		echo "<p class='bg-danger'>This cannot be left blank</p>";
+	} else {
+		move_uploaded_file($image_tmp, IMAGES_PATH . DS . $slide_image);
+		$query = query("INSERT INTO slides (slide_title, slide_image) VALUES ('{$slide_title}', '{$image_fullpath}') ");
+		confirm($query);
+		setMessage("Slide added");
+	}
+	}
+}
+//
+
+function getCurrentSlideInAdmin() {
+	$query = query("SELECT * FROM slides ORDER BY slide_id LIMIT 1");
+	confirm($query);
+	while ($row = fetchArray($query)) {
+		echo "<img class='img-responsive' src='{$row['slide_image']}' alt='{$row['slide_id']}'></img>";
+	}
+}
+//
+
+function getActiveSlide() {
+	$query = query("SELECT * FROM slides ORDER BY slide_id LIMIT 1");
+	confirm($query);
+	while ($row = fetchArray($query)) {
+		$slide_id = $row['slide_id'];
+		$slide_title = $row['slide_title'];
+		$slide_image = $row['slide_image'];
+		echo "<div class='item active'>";
+		echo "<img class='slide-image' src='{$slide_image}' alt='{$slide_title}'>";
+		echo "</div>";
+
+	}
+}
+//
+
+function getSlides() {
+	$query = query("SELECT * FROM slides");
+	confirm($query);
+	while ($row = fetchArray($query)) {
+		$slide_id = $row['slide_id'];
+		$slide_title = $row['slide_title'];
+		$slide_image = $row['slide_image'];
+		echo "<div class='item'>";
+		echo "<img class='slide-image' src='{$slide_image}' alt='{$slide_title}'>";
+		echo "</div>";
+	}
+}
+//
+
+function getSlideThumbnailinAdmin() {
+	$query = query("SELECT * FROM slides ORDER BY slide_id ASC");
+	confirm($query);
+	while ($row = fetchArray($query)) {
+		$slide_id = $row['slide_id'];
+		$slide_title = $row['slide_title'];
+		$slide_image = $row['slide_image'];
+		echo "<div class='col-xs-6 col-md-3'>";
+		echo "<img width='200' class='thumbnail' src='{$slide_image}' alt='{$slide_title}'></img>";
+		echo "</div>";
+	}
+}
+//
 ?>

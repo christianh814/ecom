@@ -22,6 +22,8 @@
                     </li>
                     <li>
                         <a href="index.php?users"><i class="fa fa-fw fa-users"></i> Users</a>
+                    <li>
+                        <a href="index.php?slides"><i class="fa fa-fw fa-file-image-o"></i> Slides</a>
                     </li>
                 
                 </ul>

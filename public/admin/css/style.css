@@ -1,4 +1,4 @@
-#page-wrapper {
+/** #page-wrapper {
   background-color: #F1F1F1 !important;
 }
 
@@ -32,4 +32,8 @@ margin-bottom: 10px;
 width: 49%;
 
 }
-
+**/
+.slide_image {
+width: 250px;
+margin-bottom 200px;
+}
